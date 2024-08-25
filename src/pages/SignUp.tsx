@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -22,7 +24,9 @@ const SignUp = () => {
         </form>
         <h6 className="text-sm mt-4 text-center">
           Already have an account?{" "}
-          <span className="text-blue-400 cursor-pointer">Login</span>
+          <Link to="/login" className="text-blue-400 cursor-pointer">
+            Login
+          </Link>
         </h6>
       </section>
     </main>

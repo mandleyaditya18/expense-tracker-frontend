@@ -6,8 +6,10 @@ const ProtectedRoute = ({ children }: PropsWithChildren) => {
   const user = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!user) {
+    if (!user || user === "undefined") {
       navigate("/login", { replace: true });
+      localStorage.removeItem("token");
+      localStorage.removeItem("refresh_token");
     }
   }, [navigate, user]);
 

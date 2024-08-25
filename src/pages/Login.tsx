@@ -1,9 +1,29 @@
-import { Link } from "react-router-dom";
+import { useState, FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import api from "@/utils/api";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const response = await api.post("/users/login/", { username, password });
+    const { access, refresh } = await response.data;
+    localStorage.setItem("token", access);
+    localStorage.setItem("refresh_token", refresh);
+
+    setUsername("");
+    setPassword("");
+
+    navigate("/", { replace: true });
+  };
+
   return (
     <main className="min-h-dvh w-screen grid grid-cols-1 lg:grid-cols-2">
       <section className="bg-slate-400 hidden lg:block"></section>
@@ -13,9 +33,19 @@ const Login = () => {
           Welcome back! Please enter your details
         </h4>
 
-        <form className="mt-8 flex flex-col gap-4">
-          <Input type="text" placeholder="Username" />
-          <Input type="password" placeholder="Password" />
+        <form className="mt-8 flex flex-col gap-4" onSubmit={handleLogin}>
+          <Input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
           <Button type="submit">Login</Button>
         </form>

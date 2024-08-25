@@ -1,9 +1,46 @@
-import { Link } from "react-router-dom";
+import { useState, FormEvent, ChangeEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import api from "@/utils/api";
+
+const defaultFormData = {
+  email: "",
+  username: "",
+  name: "",
+  password: "",
+  confirmPassword: "",
+};
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState(defaultFormData);
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const response = await api.post("/users/register/", {
+      name: formData.name,
+      email: formData.email,
+      username: formData.username,
+      password: formData.password,
+      password2: formData.confirmPassword,
+    });
+    const { access, refresh } = await response.data;
+    localStorage.setItem("token", access);
+    localStorage.setItem("refresh_token", refresh);
+
+    setFormData(defaultFormData);
+
+    navigate("/", { replace: true });
+    console.log(formData);
+  };
+
   return (
     <main className="min-h-dvh w-screen grid grid-cols-1 lg:grid-cols-2">
       <section className="bg-slate-400 hidden lg:block"></section>
@@ -13,12 +50,42 @@ const SignUp = () => {
           Create your account and start your journey with us.
         </h4>
 
-        <form className="mt-8 flex flex-col gap-4">
-          <Input type="email" placeholder="Email" />
-          <Input type="text" placeholder="Username" />
-          <Input type="text" placeholder="Name" />
-          <Input type="password" placeholder="Password" />
-          <Input type="password" placeholder="Confirm Password" />
+        <form className="mt-8 flex flex-col gap-4" onSubmit={onSubmitHandler}>
+          <Input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={onChangeHandler}
+          />
+          <Input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={onChangeHandler}
+          />
+          <Input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={onChangeHandler}
+          />
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={onChangeHandler}
+          />
+          <Input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={onChangeHandler}
+          />
 
           <Button type="submit">Sign Up</Button>
         </form>

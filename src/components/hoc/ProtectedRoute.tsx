@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import Navbar from "../shared/Navbar";
 
 const ProtectedRoute = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = localStorage.getItem("token");
 
   useEffect(() => {
@@ -11,8 +12,10 @@ const ProtectedRoute = () => {
       navigate("/login", { replace: true });
       localStorage.removeItem("token");
       localStorage.removeItem("refresh_token");
+    } else if (location.pathname === "/") {
+      navigate("/dashboard");
     }
-  }, [navigate, user]);
+  }, [navigate, user, location]);
 
   return (
     <div className="flex h-dvh w-dvw bg-[#1f1f1f]">

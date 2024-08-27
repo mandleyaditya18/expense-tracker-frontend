@@ -1,7 +1,8 @@
-import { PropsWithChildren, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
+import Navbar from "../shared/Navbar";
 
-const ProtectedRoute = ({ children }: PropsWithChildren) => {
+const ProtectedRoute = () => {
   const navigate = useNavigate();
   const user = localStorage.getItem("token");
 
@@ -13,7 +14,12 @@ const ProtectedRoute = ({ children }: PropsWithChildren) => {
     }
   }, [navigate, user]);
 
-  return children;
+  return (
+    <div className="flex h-dvh w-dvw bg-[#1f1f1f]">
+      <Navbar />
+      <Outlet />
+    </div>
+  );
 };
 
 export default ProtectedRoute;

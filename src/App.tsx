@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/hoc/ProtectedRoute";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Expenses from "./pages/Expenses";
+import api from "./utils/api";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/expenses",
         element: <Expenses />,
+        loader: async () => {
+          const response = await api.get("/expenses/");
+          return response.data;
+        },
       },
       {
         path: "/settings",

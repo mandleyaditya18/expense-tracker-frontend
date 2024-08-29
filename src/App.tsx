@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectedRoute from "./components/hoc/ProtectedRoute";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Expenses from "./pages/Expenses";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/expenses",
-        element: <h1 className="text-custom-white">Expenses</h1>,
+        element: <Expenses />,
       },
       {
         path: "/settings",

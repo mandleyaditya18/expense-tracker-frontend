@@ -18,9 +18,11 @@ const ProtectedRoute = () => {
   }, [navigate, user, location]);
 
   return (
-    <div className="flex h-dvh w-dvw bg-[#1f1f1f]">
+    <div className="flex h-dvh w-dvw">
       <Navbar />
-      <Outlet />
+      <div className="w-full">
+        <Outlet />
+      </div>
     </div>
   );
 };

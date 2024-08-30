@@ -9,7 +9,8 @@ export interface Expense {
     title: string;
     description: string;
     date: string;
-    amount: string;
+    amount: number;
+    parsed_amount: string;
     category: Category[];
     frequency: "one_time" | "recurring";
   }

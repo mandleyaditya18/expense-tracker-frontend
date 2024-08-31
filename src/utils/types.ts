@@ -12,5 +12,6 @@ export interface Expense {
     amount: number;
     parsed_amount: string;
     category: Category[];
-    frequency: "one_time" | "recurring";
+    frequency: string;
+    parsed_frequency: string;
   }

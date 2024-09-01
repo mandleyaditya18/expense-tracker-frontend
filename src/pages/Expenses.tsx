@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 
 import { Input } from "@/components/ui/input";
@@ -5,9 +6,17 @@ import ExpensesTable from "@/components/shared/ExpensesTable";
 import AddExpenseDrawer from "@/components/shared/AddExpenseDrawer";
 
 import { Expense } from "@/utils/types";
+import { useExpenseStore } from "@/store/useExpenseStore";
 
 const Expenses = () => {
-  const expenses = useLoaderData() as Expense[];
+  const { expenses, setExpenses } = useExpenseStore();
+  const expenseData = useLoaderData() as Expense[];
+
+  useEffect(() => {
+    if (expenseData) {
+      setExpenses(expenseData);
+    }
+  }, [expenseData, setExpenses]);
 
   return (
     <div className="py-4 px-8 w-100">

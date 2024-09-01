@@ -33,7 +33,7 @@ const AddExpenseDrawer = () => {
           <DialogHeader>
             <DialogTitle>Add Expense</DialogTitle>
           </DialogHeader>
-          <AddExpenseForm />
+          <AddExpenseForm setOpenForm={setOpen} />
         </DialogContent>
       </Dialog>
     );
@@ -48,7 +48,7 @@ const AddExpenseDrawer = () => {
         <DrawerHeader className="text-left">
           <DrawerTitle>Add Expense</DrawerTitle>
         </DrawerHeader>
-        <AddExpenseForm className="px-4" />
+        <AddExpenseForm className="px-4" setOpenForm={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>

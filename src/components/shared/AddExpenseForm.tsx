@@ -18,6 +18,7 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { EXPENSE_FREQUENCY } from "@/utils/constants";
 import api from "@/utils/api";
 import { format } from "date-fns";
+import { useExpenseStore } from "@/store/useExpenseStore";
 
 const defaultValues = {
   title: "",
@@ -28,7 +29,16 @@ const defaultValues = {
   frequency: "one_time",
 };
 
-const AddExpenseForm = ({ className }: React.ComponentProps<"form">) => {
+interface AddExpenseFormProps {
+  className?: string;
+  setOpenForm: (openState: boolean) => void;
+}
+
+const AddExpenseForm: React.FC<AddExpenseFormProps> = ({
+  className,
+  setOpenForm,
+}) => {
+  const { addExpense } = useExpenseStore();
   const [expenseFormData, setExpenseFormData] = useState(defaultValues);
 
   const onChange = (name: string, val: string | Date | undefined) => {
@@ -38,7 +48,7 @@ const AddExpenseForm = ({ className }: React.ComponentProps<"form">) => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
-      await api.post("/expenses/", {
+      const response = await api.post("/expenses/", {
         title: expenseFormData.title,
         description: expenseFormData.description,
         date: format(
@@ -49,7 +59,10 @@ const AddExpenseForm = ({ className }: React.ComponentProps<"form">) => {
         category: [{ name: expenseFormData.category }],
         frequency: expenseFormData.frequency,
       });
+      const data = await response.data;
+      addExpense(data);
       setExpenseFormData(defaultValues);
+      setOpenForm(false);
     } catch (error) {
       console.error(error);
     }

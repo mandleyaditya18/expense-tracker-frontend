@@ -9,8 +9,9 @@ export interface Expense {
     title: string;
     description: string;
     date: string;
-    amount: number;
-    parsed_amount: string;
+    amount: string;
+    parsed_amount: number;
+    parsed_amount_str: string;
     category: Category[];
     frequency: string;
     parsed_frequency: string;

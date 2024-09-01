@@ -36,7 +36,7 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
             <TableCell>Food</TableCell>
             <TableCell>{expense.parsed_frequency}</TableCell>
             <TableCell className="text-right">
-              {expense.parsed_amount}
+              {expense.parsed_amount_str}
             </TableCell>
           </TableRow>
         ))}

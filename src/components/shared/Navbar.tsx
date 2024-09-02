@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-screen fixed md:relative bottom-0 border-t py-4 md:w-60 md:min-h-dvh md:border-t-0 md:border-r border-[#87888c] md:py-4 md:px-8 md:flex md:flex-col">
+    <nav className="w-screen fixed md:relative bottom-0 border-t py-4 bg-white z-10 md:z-0 md:w-60 md:min-h-dvh md:border-t-0 md:border-r border-[#87888c] md:py-4 md:px-8 md:flex md:flex-col">
       <h1 className="font-bold pl-4 text-xl hidden md:block">FinCompass</h1>
       <ul className="flex justify-around text-[#87888c] md:flex-col md:gap-4 md:pt-8 md:h-full">
         {NAV_ITEMS.map((item, index) => {

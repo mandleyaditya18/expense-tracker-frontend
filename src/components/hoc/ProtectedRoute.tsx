@@ -20,7 +20,7 @@ const ProtectedRoute = () => {
   return (
     <div className="flex h-dvh w-dvw">
       <Navbar />
-      <div className="w-full">
+      <div className="w-full h-full overflow-auto">
         <Outlet />
       </div>
     </div>

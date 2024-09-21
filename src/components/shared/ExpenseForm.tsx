@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -19,6 +19,7 @@ import { EXPENSE_FREQUENCY } from "@/utils/constants";
 import api from "@/utils/api";
 import { format } from "date-fns";
 import { useExpenseStore } from "@/store/useExpenseStore";
+import { Expense } from "@/utils/types";
 
 const defaultValues = {
   title: "",
@@ -29,12 +30,14 @@ const defaultValues = {
   frequency: "one_time",
 };
 
-interface AddExpenseFormProps {
+interface ExpenseFormProps {
+  expense?: Expense;
   className?: string;
   setOpenForm: (openState: boolean) => void;
 }
 
-const AddExpenseForm: React.FC<AddExpenseFormProps> = ({
+const ExpenseForm: React.FC<ExpenseFormProps> = ({
+  expense,
   className,
   setOpenForm,
 }) => {
@@ -44,6 +47,19 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({
   const onChange = (name: string, val: string | Date | undefined) => {
     setExpenseFormData((prev) => ({ ...prev, [name]: val }));
   };
+
+  useEffect(() => {
+    if (expense) {
+      setExpenseFormData({
+        title: expense.title,
+        description: expense.description,
+        date: new Date(expense.date),
+        amount: expense.parsed_amount,
+        category: expense.category[0].name,
+        frequency: expense.frequency,
+      });
+    }
+  }, [expense]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
@@ -142,7 +158,9 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({
               <SelectGroup>
                 <SelectLabel>Frequency</SelectLabel>
                 {EXPENSE_FREQUENCY.map((freq) => (
-                  <SelectItem value={freq.value}>{freq.label}</SelectItem>
+                  <SelectItem key={freq.value} value={freq.value}>
+                    {freq.label}
+                  </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
@@ -154,4 +172,4 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({
   );
 };
 
-export default AddExpenseForm;
+export default ExpenseForm;

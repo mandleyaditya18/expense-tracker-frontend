@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,23 +17,37 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import AddExpenseForm from "./AddExpenseForm";
+import ExpenseForm from "./ExpenseForm";
+import { Expense } from "@/utils/types";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 
-const AddExpenseDrawer = () => {
+interface ExpenseDrawerProps {
+  expense?: Expense;
+}
+
+const ExpenseDrawer: FC<ExpenseDrawerProps> = ({ expense }) => {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const buttonText = expense ? <Pencil1Icon /> : "+ Add Expense";
+  const formTitle = expense ? "Edit Expense" : "Add Expense";
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button>+ Add Expense</Button>
+          <Button
+            variant={expense ? "secondary" : "default"}
+            size={expense ? "icon" : "default"}
+          >
+            {buttonText}
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Expense</DialogTitle>
+            <DialogTitle>{formTitle}</DialogTitle>
           </DialogHeader>
-          <AddExpenseForm setOpenForm={setOpen} />
+          <ExpenseForm setOpenForm={setOpen} expense={expense} />
         </DialogContent>
       </Dialog>
     );
@@ -42,13 +56,18 @@ const AddExpenseDrawer = () => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button>+ Add Expense</Button>
+        <Button
+          variant={expense ? "secondary" : "default"}
+          size={expense ? "icon" : "default"}
+        >
+          {buttonText}
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Add Expense</DrawerTitle>
+          <DrawerTitle>{formTitle}</DrawerTitle>
         </DrawerHeader>
-        <AddExpenseForm className="px-4" setOpenForm={setOpen} />
+        <ExpenseForm className="px-4" setOpenForm={setOpen} expense={expense} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -59,4 +78,4 @@ const AddExpenseDrawer = () => {
   );
 };
 
-export default AddExpenseDrawer;
+export default ExpenseDrawer;

@@ -7,6 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "../ui/button";
+import ExpenseDrawer from "./ExpenseDrawer";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 interface ExpenseTableProps {
   expenses: Expense[];
@@ -26,6 +29,7 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
           <TableHead>Category</TableHead>
           <TableHead>Frequency</TableHead>
           <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="text-center">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -37,6 +41,12 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
             <TableCell>{expense.parsed_frequency}</TableCell>
             <TableCell className="text-right">
               {expense.parsed_amount_str}
+            </TableCell>
+            <TableCell className="text-center justify-center flex gap-2">
+              <ExpenseDrawer expense={expense} />
+              <Button variant="destructive" size="icon">
+                <TrashIcon />
+              </Button>
             </TableCell>
           </TableRow>
         ))}

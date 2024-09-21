@@ -41,7 +41,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   className,
   setOpenForm,
 }) => {
-  const { addExpense } = useExpenseStore();
+  const { addExpense, updateExpense } = useExpenseStore();
   const [expenseFormData, setExpenseFormData] = useState(defaultValues);
 
   const onChange = (name: string, val: string | Date | undefined) => {
@@ -64,7 +64,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
-      const response = await api.post("/expenses/", {
+      const payload = {
         title: expenseFormData.title,
         description: expenseFormData.description,
         date: format(
@@ -74,9 +74,18 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         amount: Number(expenseFormData.amount).toFixed(2),
         category: [{ name: expenseFormData.category }],
         frequency: expenseFormData.frequency,
-      });
-      const data = await response.data;
-      addExpense(data);
+      };
+
+      const { data } = expense
+        ? await api.put(`/expenses/${expense.id}/`, payload)
+        : await api.post("/expenses/", payload);
+
+      if (expense) {
+        updateExpense(data);
+      } else {
+        addExpense(data);
+      }
+
       setExpenseFormData(defaultValues);
       setOpenForm(false);
     } catch (error) {

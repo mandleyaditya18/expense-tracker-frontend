@@ -28,7 +28,7 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
           <TableHead className="">Title</TableHead>
           <TableHead>Date</TableHead>
           <TableHead>Category</TableHead>
-          <TableHead>Frequency</TableHead>
+          {/* <TableHead>Frequency</TableHead> */}
           <TableHead className="text-right">Amount</TableHead>
           <TableHead className="text-center">Actions</TableHead>
         </TableRow>
@@ -39,11 +39,11 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
             <TableCell className="font-medium">{expense.title}</TableCell>
             <TableCell>{format(expense.date, "MMM do, yyyy")}</TableCell>
             <TableCell>Food</TableCell>
-            <TableCell>{expense.parsed_frequency}</TableCell>
+            {/* <TableCell>{expense.parsed_frequency}</TableCell> */}
             <TableCell className="text-right">
               {expense.parsed_amount_str}
             </TableCell>
-            <TableCell className="text-center justify-center flex gap-2">
+            <TableCell className="text-center justify-center flex gap-4">
               <ExpenseDrawer expense={expense} />
               <Button variant="destructive" size="icon">
                 <TrashIcon />

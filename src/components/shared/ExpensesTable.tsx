@@ -10,6 +10,7 @@ import {
 import { Button } from "../ui/button";
 import ExpenseDrawer from "./ExpenseDrawer";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 
 interface ExpenseTableProps {
   expenses: Expense[];
@@ -36,7 +37,7 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
         {expenses.map((expense) => (
           <TableRow key={expense.id}>
             <TableCell className="font-medium">{expense.title}</TableCell>
-            <TableCell>{expense.date}</TableCell>
+            <TableCell>{format(expense.date, "MMM do, yyyy")}</TableCell>
             <TableCell>Food</TableCell>
             <TableCell>{expense.parsed_frequency}</TableCell>
             <TableCell className="text-right">

@@ -11,6 +11,8 @@ import { Button } from "../ui/button";
 import ExpenseDrawer from "./ExpenseDrawer";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import api from "@/utils/api";
+import { useExpenseStore } from "@/store/useExpenseStore";
 
 interface ExpenseTableProps {
   expenses: Expense[];
@@ -21,6 +23,17 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
   expenses,
   className,
 }) => {
+  const { deleteExpense } = useExpenseStore();
+
+  const deleteExpenseHandler = async (expenseId: number) => {
+    try {
+      await api.delete(`/expenses/${expenseId}/`);
+      deleteExpense(expenseId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Table className={className}>
       <TableHeader>
@@ -45,7 +58,11 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
             </TableCell>
             <TableCell className="text-center justify-center flex gap-4">
               <ExpenseDrawer expense={expense} />
-              <Button variant="destructive" size="icon">
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() => deleteExpenseHandler(expense.id)}
+              >
                 <TrashIcon />
               </Button>
             </TableCell>

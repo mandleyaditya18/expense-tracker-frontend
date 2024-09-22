@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
 import ExpenseDrawer from "./ExpenseDrawer";
-import { TrashIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import api from "@/utils/api";
 import { useExpenseStore } from "@/store/useExpenseStore";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 interface ExpenseTableProps {
   expenses: Expense[];
@@ -63,7 +63,7 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
                 size="icon"
                 onClick={() => deleteExpenseHandler(expense.id)}
               >
-                <TrashIcon />
+                <TrashIcon className="h-4 w-4" />
               </Button>
             </TableCell>
           </TableRow>

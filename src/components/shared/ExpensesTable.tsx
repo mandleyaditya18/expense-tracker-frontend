@@ -59,11 +59,12 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
             <TableCell className="text-center justify-center flex gap-4">
               <ExpenseDrawer expense={expense} />
               <Button
-                variant="destructive"
+                variant="outline"
                 size="icon"
+                className="border-red-500"
                 onClick={() => deleteExpenseHandler(expense.id)}
               >
-                <TrashIcon className="h-4 w-4" />
+                <TrashIcon className="h-4 w-4 text-red-500" />
               </Button>
             </TableCell>
           </TableRow>

@@ -15,18 +15,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { EXPENSE_FREQUENCY } from "@/utils/constants";
 import api from "@/utils/api";
 import { format } from "date-fns";
 import { useExpenseStore } from "@/store/useExpenseStore";
 import { Expense } from "@/utils/types";
 
-const defaultValues = {
+const defaultValues: {
+  title: string;
+  description: string;
+  date: Date;
+  amount: number;
+  category: Array<string>;
+  frequency: string;
+} = {
   title: "",
   description: "",
   date: new Date(),
   amount: 0.0,
-  category: "food",
+  category: [],
   frequency: "one_time",
 };
 
@@ -36,6 +44,12 @@ interface ExpenseFormProps {
   setOpenForm: (openState: boolean) => void;
 }
 
+const CATEGORIES = [
+  { value: "food", label: "Food" },
+  { value: "grocery", label: "Grocery" },
+  { value: "transport", label: "Transport" },
+];
+
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
   expense,
   className,
@@ -44,7 +58,10 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   const { addExpense, updateExpense } = useExpenseStore();
   const [expenseFormData, setExpenseFormData] = useState(defaultValues);
 
-  const onChange = (name: string, val: string | Date | undefined) => {
+  const onChange = (
+    name: string,
+    val: string | string[] | Date | undefined,
+  ) => {
     setExpenseFormData((prev) => ({ ...prev, [name]: val }));
   };
 
@@ -55,7 +72,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         description: expense.description,
         date: new Date(expense.date),
         amount: expense.parsed_amount,
-        category: expense.category[0].name,
+        category: expense.category.map((c) => c.name),
         frequency: expense.frequency,
       });
     }
@@ -69,10 +86,10 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         description: expenseFormData.description,
         date: format(
           expenseFormData.date,
-          format(expenseFormData.date, "yyyy-MM-dd")
+          format(expenseFormData.date, "yyyy-MM-dd"),
         ),
         amount: Number(expenseFormData.amount).toFixed(2),
-        category: [{ name: expenseFormData.category }],
+        category: expenseFormData.category.map((c) => ({ name: c })),
         frequency: expenseFormData.frequency,
       };
 
@@ -136,45 +153,37 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        <div className="grid gap-2">
-          <Label htmlFor="category">Category</Label>
-          <Select
-            value={expenseFormData.category}
-            onValueChange={(val) => onChange("category", val)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Category</SelectLabel>
-                <SelectItem value="food">Food</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="frequency">Frequency</Label>
-          <Select
-            value={expenseFormData.frequency}
-            onValueChange={(val) => onChange("frequency", val)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Frequency" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Frequency</SelectLabel>
-                {EXPENSE_FREQUENCY.map((freq) => (
-                  <SelectItem key={freq.value} value={freq.value}>
-                    {freq.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="grid gap-2">
+        <Label htmlFor="category">Category</Label>
+        <MultiSelect
+          options={CATEGORIES}
+          onValueChange={(val) => onChange("category", val)}
+          defaultValue={expenseFormData.category}
+          placeholder="Select categories"
+          variant="inverted"
+          maxCount={2}
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="frequency">Frequency</Label>
+        <Select
+          value={expenseFormData.frequency}
+          onValueChange={(val) => onChange("frequency", val)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Frequency" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Frequency</SelectLabel>
+              {EXPENSE_FREQUENCY.map((freq) => (
+                <SelectItem key={freq.value} value={freq.value}>
+                  {freq.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
       <Button type="submit">Save changes</Button>
     </form>

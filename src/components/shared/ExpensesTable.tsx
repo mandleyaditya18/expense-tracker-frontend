@@ -51,7 +51,7 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
           <TableRow key={expense.id}>
             <TableCell className="font-medium">{expense.title}</TableCell>
             <TableCell>{format(expense.date, "MMM do, yyyy")}</TableCell>
-            <TableCell>Food</TableCell>
+            <TableCell>{expense.category[0].name}</TableCell>
             {/* <TableCell>{expense.parsed_frequency}</TableCell> */}
             <TableCell className="text-right">
               {expense.parsed_amount_str}

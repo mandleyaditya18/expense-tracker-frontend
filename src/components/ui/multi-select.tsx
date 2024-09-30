@@ -1,6 +1,7 @@
 // src/components/multi-select.tsx
 
 import * as React from "react";
+import { useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon, XCircle, ChevronDown, XIcon } from "lucide-react";
 
@@ -136,6 +137,10 @@ export const MultiSelect = React.forwardRef<
       React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
+    useEffect(() => {
+      setSelectedValues(defaultValue);
+    }, [defaultValue]);
+
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>,
     ) => {
@@ -162,7 +167,11 @@ export const MultiSelect = React.forwardRef<
       onValueChange([]);
     };
 
-    const handleTogglePopover = () => {
+    const handleTogglePopover = (
+      event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+      event.stopPropagation();
+      event.preventDefault();
       setIsPopoverOpen((prev) => !prev);
     };
 

@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import api from "@/utils/api";
 import { useExpenseStore } from "@/store/useExpenseStore";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { Badge } from "../ui/badge";
 
 interface ExpenseTableProps {
   expenses: Expense[];
@@ -51,7 +52,15 @@ const ExpensesTable: React.FC<ExpenseTableProps> = ({
           <TableRow key={expense.id}>
             <TableCell className="font-medium">{expense.title}</TableCell>
             <TableCell>{format(expense.date, "MMM do, yyyy")}</TableCell>
-            <TableCell>{expense.category[0].name}</TableCell>
+            <TableCell>
+              <div className="flex gap-2">
+                {expense.category.map((c) => (
+                  <Badge key={c.id} className="capitalize" variant="secondary">
+                    {c.name}
+                  </Badge>
+                ))}
+              </div>
+            </TableCell>
             {/* <TableCell>{expense.parsed_frequency}</TableCell> */}
             <TableCell className="text-right">
               {expense.parsed_amount_str}

@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -44,18 +44,12 @@ interface ExpenseFormProps {
   setOpenForm: (openState: boolean) => void;
 }
 
-const CATEGORIES = [
-  { value: "food", label: "Food" },
-  { value: "grocery", label: "Grocery" },
-  { value: "transport", label: "Transport" },
-];
-
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
   expense,
   className,
   setOpenForm,
 }) => {
-  const { addExpense, updateExpense } = useExpenseStore();
+  const { addExpense, updateExpense, expenseCategories } = useExpenseStore();
   const [expenseFormData, setExpenseFormData] = useState(defaultValues);
 
   const onChange = (
@@ -77,6 +71,13 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
       });
     }
   }, [expense]);
+
+  const expenseCategoryOptions = useMemo(() => {
+    return expenseCategories.map((category) => ({
+      value: category.id.toString(),
+      label: category.name.charAt(0).toUpperCase() + category.name.slice(1),
+    }));
+  }, [expenseCategories]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
@@ -156,7 +157,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
       <div className="grid gap-2">
         <Label htmlFor="category">Category</Label>
         <MultiSelect
-          options={CATEGORIES}
+          options={expenseCategoryOptions}
           onValueChange={(val) => onChange("category", val)}
           defaultValue={expenseFormData.category}
           placeholder="Select categories"

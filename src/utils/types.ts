@@ -16,3 +16,10 @@ export interface Expense {
     frequency: string;
     parsed_frequency: string;
   }
+
+export interface ExpensesAPIResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results?: Expense[]
+}

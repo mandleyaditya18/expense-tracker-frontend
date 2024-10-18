@@ -1,4 +1,4 @@
-import { Category, Expense } from "@/utils/types";
+import { Category, Expense, ExpensesAPIResponse } from "@/utils/types";
 import { create } from "zustand";
 
 interface ExpensesState {
@@ -10,6 +10,9 @@ interface ExpensesState {
 
   expenseCategories: Category[];
   setExpenseCategories: (categories: Category[]) => void;
+
+  expenseMetadata: ExpensesAPIResponse;
+  setExpenseMetadata: (metadata: ExpensesAPIResponse) => void;
 }
 
 export const useExpenseStore = create<ExpensesState>()((set) => ({
@@ -29,4 +32,7 @@ export const useExpenseStore = create<ExpensesState>()((set) => ({
   expenseCategories: [],
   setExpenseCategories: (categories) =>
     set(() => ({ expenseCategories: categories })),
+
+  expenseMetadata: {count: 0, next: null, previous: null},
+  setExpenseMetadata: (metadata) => set(() => ({expenseMetadata: metadata })),
 }));

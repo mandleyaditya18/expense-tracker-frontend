@@ -5,18 +5,42 @@ import { Input } from "@/components/ui/input";
 import ExpensesTable from "@/components/shared/ExpensesTable";
 import ExpenseDrawer from "@/components/shared/ExpenseDrawer";
 
-import { Expense } from "@/utils/types";
+import { ExpensesAPIResponse } from "@/utils/types";
 import { useExpenseStore } from "@/store/useExpenseStore";
+import { Button } from "@/components/ui/button";
+import api from "@/utils/api";
 
 const Expenses = () => {
-  const { expenses, setExpenses } = useExpenseStore();
-  const expenseData = useLoaderData() as Expense[];
+  const { expenses, setExpenses, expenseMetadata, setExpenseMetadata } =
+    useExpenseStore();
+  const { count, next, previous, results } =
+    useLoaderData() as ExpensesAPIResponse;
 
   useEffect(() => {
-    if (expenseData) {
-      setExpenses(expenseData);
+    if (results) {
+      setExpenses(results);
+      setExpenseMetadata({ count, next, previous });
     }
-  }, [expenseData, setExpenses]);
+  }, [results, setExpenses, setExpenseMetadata, count, next, previous]);
+
+  const paginationHandler = async (type: "next" | "prev") => {
+    try {
+      const url =
+        type === "next" ? expenseMetadata.next : expenseMetadata.previous;
+      if (url) {
+        const response = await api.get(url);
+        const data = await response.data;
+        setExpenseMetadata({
+          count: data.count,
+          next: data.next,
+          previous: data.previous,
+        });
+        setExpenses(data.results);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="py-4 px-8 w-100">
@@ -25,6 +49,22 @@ const Expenses = () => {
         <ExpenseDrawer />
       </div>
       <ExpensesTable expenses={expenses} className="mt-12" />
+      <div className="p-4 flex justify-end">
+        <Button
+          variant="ghost"
+          onClick={() => paginationHandler("prev")}
+          disabled={!expenseMetadata.previous}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => paginationHandler("next")}
+          disabled={!expenseMetadata.next}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };

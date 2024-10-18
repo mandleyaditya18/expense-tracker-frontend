@@ -10,16 +10,6 @@ const ProtectedRoute = () => {
   const { setExpenseCategories } = useExpenseStore();
   const user = localStorage.getItem("token");
 
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get("/expenses/categories");
-      const data = await response.data;
-      setExpenseCategories(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
     if (!user || user === "undefined") {
       navigate("/login", { replace: true });
@@ -31,10 +21,20 @@ const ProtectedRoute = () => {
   }, [navigate, user, location]);
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/expenses/categories");
+        const data = await response.data;
+        setExpenseCategories(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     if (user) {
       fetchCategories();
     }
-  }, [user]);
+  }, [user, setExpenseCategories]);
 
   return (
     <div className="flex h-dvh w-dvw">

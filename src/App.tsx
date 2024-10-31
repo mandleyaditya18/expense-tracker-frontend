@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Expenses from "./pages/Expenses";
 import api from "./utils/api";
+import { dashboardAPI } from "./api/dashboard";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <h1 className="text-custom-white">Dashboard</h1>,
+        loader: dashboardAPI,
       },
       {
         path: "/expenses",

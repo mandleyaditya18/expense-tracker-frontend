@@ -66,7 +66,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         description: expense.description,
         date: new Date(expense.date),
         amount: expense.parsed_amount,
-        category: expense.category.map((c) => c.name),
+        category: expense.category.map((c) => c.id.toString()),
         frequency: expense.frequency,
       });
     }
@@ -75,7 +75,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   const expenseCategoryOptions = useMemo(() => {
     return expenseCategories.map((category) => ({
       value: category.id.toString(),
-      label: category.name.charAt(0).toUpperCase() + category.name.slice(1),
+      label: category.name.split("_").join(" "),
     }));
   }, [expenseCategories]);
 
@@ -90,7 +90,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           format(expenseFormData.date, "yyyy-MM-dd"),
         ),
         amount: Number(expenseFormData.amount).toFixed(2),
-        category: expenseFormData.category.map((c) => ({ name: c })),
+        category: expenseFormData.category.map((c) => ({
+          name: expenseCategories.find((i) => i.id === parseInt(c))?.name,
+        })),
         frequency: expenseFormData.frequency,
       };
 

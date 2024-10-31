@@ -216,7 +216,10 @@ export const MultiSelect = React.forwardRef<
                     return (
                       <Badge
                         key={value}
-                        className={cn(multiSelectVariants({ variant }))}
+                        className={cn(
+                          "capitalize",
+                          multiSelectVariants({ variant }),
+                        )}
                       >
                         {IconComponent && (
                           <IconComponent className="h-4 w-4 mr-2" />
@@ -326,7 +329,7 @@ export const MultiSelect = React.forwardRef<
                       {option.icon && (
                         <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                       )}
-                      <span>{option.label}</span>
+                      <span className="capitalize">{option.label}</span>
                     </CommandItem>
                   );
                 })}
